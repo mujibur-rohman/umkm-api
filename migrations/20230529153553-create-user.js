@@ -9,6 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      uuid: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -16,9 +20,16 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
+        validate: {
+          isEmail: true,
+        },
       },
       password: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      role: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       emailVerified: {
