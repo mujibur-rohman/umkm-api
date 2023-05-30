@@ -1,5 +1,6 @@
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const { uuid } = require("uuidv4");
 const { User } = require("../models");
 
 exports.registerUser = async (req, res) => {
@@ -21,6 +22,7 @@ exports.registerUser = async (req, res) => {
     await User.create({
       name,
       email,
+      uuid: uuid(),
       password: hashPassword,
       role,
       profilePicture,
