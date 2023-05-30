@@ -17,7 +17,8 @@
     "express-fileupload": "^1.4.0",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.3.3",
-    "sequelize": "^6.31.1"
+    "sequelize": "^6.31.1",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.0"
