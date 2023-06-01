@@ -6,7 +6,7 @@ const { User } = require("../models");
 exports.registerUser = async (req, res) => {
   try {
     // Ambil value dari body
-    const { name, email, password, role, profilePicture } = req.body;
+    const { name, email, password, profilePicture } = req.body;
 
     // Cek apakah email sudah terdaftar atau belum
     const UserHasCreate = await User.findOne({
@@ -24,7 +24,6 @@ exports.registerUser = async (req, res) => {
       email,
       uuid: uuid(),
       password: hashPassword,
-      role,
       profilePicture,
       isEmailVerified: false,
     });
@@ -60,7 +59,6 @@ exports.login = async (req, res) => {
           name: userAvailable.name,
           email: userAvailable.email,
           profilePicture: userAvailable.profilePicture,
-          role: userAvailable.role,
           emailVerified: userAvailable.emailVerified,
         },
       },
@@ -73,7 +71,6 @@ exports.login = async (req, res) => {
       name: userAvailable.name,
       email: userAvailable.email,
       profilePicture: userAvailable.profilePicture,
-      role: userAvailable.role,
       emailVerified: userAvailable.emailVerified,
       token: { accessToken, expired: 60 },
     });
