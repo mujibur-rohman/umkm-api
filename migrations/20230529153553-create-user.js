@@ -36,10 +36,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      role: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       emailVerified: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
