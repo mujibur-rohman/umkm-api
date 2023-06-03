@@ -16,11 +16,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.static("public"));
 app.listen(process.env.APP_PORT, () => console.log("Server Running"));
-
-app.get("/user", async (req, res) => {
-  const resp = await User.findAll();
-  res.json(resp);
-});
 
 app.use(authRoute);

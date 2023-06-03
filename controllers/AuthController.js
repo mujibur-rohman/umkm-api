@@ -1,5 +1,6 @@
 const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 const { uuid } = require("uuidv4");
 const { User } = require("../models");
 
@@ -74,6 +75,40 @@ exports.login = async (req, res) => {
       emailVerified: userAvailable.emailVerified,
       token: { accessToken, expired: 60 },
     });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+exports.changeProfilePicture = async (req, res) => {
+  try {
+    const currentUser = await User.findOne({
+      where: {
+        uuid: req.body.uuid,
+      },
+    });
+    if (!currentUser)
+      return res.status(404).json({ message: "User belum terdaftar" });
+    // Hapus gambar lama
+
+    if (currentUser.profilePicture) {
+      const splitFilename = currentUser.profilePicture.split("/");
+      const fileNameOld = splitFilename[splitFilename.length - 1];
+      const filepathOld = `./public/images/${fileNameOld}`;
+      if (fileNameOld !== req.file.filename) {
+        fs.unlinkSync(filepathOld);
+      }
+    }
+
+    const filePath = `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`;
+    await User.update(
+      { profilePicture: filePath },
+      { where: { id: currentUser.id } }
+    );
+
+    res.json({ message: "Foto Profil Berhasil Diubah" });
   } catch (error) {
     res.status(400).json(error.message);
   }
