@@ -90,7 +90,6 @@ exports.changeProfilePicture = async (req, res) => {
     if (!currentUser)
       return res.status(404).json({ message: "User belum terdaftar" });
     // Hapus gambar lama
-
     if (currentUser.profilePicture) {
       const splitFilename = currentUser.profilePicture.split("/");
       const fileNameOld = splitFilename[splitFilename.length - 1];
@@ -108,7 +107,7 @@ exports.changeProfilePicture = async (req, res) => {
       { where: { id: currentUser.id } }
     );
 
-    res.json({ message: "Foto Profil Berhasil Diubah" });
+    res.status(200).json({ message: "Foto Profil Berhasil Diubah" });
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -116,13 +115,32 @@ exports.changeProfilePicture = async (req, res) => {
 
 exports.updatePassword = async (req, res) => {
   try {
+    const { oldPassword, newPassword } = req.body;
     const currentUser = await User.findOne({
       where: {
-        uuid: req.body.uuid,
+        uuid: req.params.uuid,
       },
     });
     if (!currentUser)
       return res.status(404).json({ message: "User belum terdaftar" });
+
+    // cek old password
+    const matchOldPassword = await argon2.verify(
+      currentUser.password,
+      oldPassword
+    );
+    if (!matchOldPassword)
+      return res
+        .status(400)
+        .json({ message: "Password lama anda tidak cocok" });
+
+    // proses update
+    const hashNewPassword = await argon2.hash(newPassword);
+    await User.update(
+      { password: hashNewPassword },
+      { where: { id: currentUser.id } }
+    );
+    res.status(200).json({ message: "Password Berhasil Diubah" });
   } catch (error) {
     res.status(400).json(error.message);
   }

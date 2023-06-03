@@ -3,6 +3,7 @@ const {
   registerUser,
   login,
   changeProfilePicture,
+  updatePassword,
 } = require("../controllers/AuthController");
 const multer = require("multer");
 
@@ -38,5 +39,6 @@ authRoute.put(
   upload.single("profilePicture"),
   changeProfilePicture
 );
+authRoute.put("/auth/change-password/:uuid", updatePassword);
 
 module.exports = authRoute;
