@@ -84,7 +84,7 @@ exports.changeProfilePicture = async (req, res) => {
   try {
     const currentUser = await User.findOne({
       where: {
-        uuid: req.body.uuid,
+        uuid: req.params.uuid,
       },
     });
     if (!currentUser)
@@ -109,6 +109,20 @@ exports.changeProfilePicture = async (req, res) => {
     );
 
     res.json({ message: "Foto Profil Berhasil Diubah" });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  try {
+    const currentUser = await User.findOne({
+      where: {
+        uuid: req.body.uuid,
+      },
+    });
+    if (!currentUser)
+      return res.status(404).json({ message: "User belum terdaftar" });
   } catch (error) {
     res.status(400).json(error.message);
   }

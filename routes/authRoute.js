@@ -34,7 +34,7 @@ const authRoute = express.Router();
 authRoute.post("/auth/register", registerUser);
 authRoute.post("/auth/login", login);
 authRoute.put(
-  "/auth/profile-picture",
+  "/auth/profile-picture/:uuid",
   upload.single("profilePicture"),
   changeProfilePicture
 );
