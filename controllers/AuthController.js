@@ -186,3 +186,48 @@ exports.activationEmail = async (req, res) => {
     res.status(400).json(error.message);
   }
 };
+
+exports.changeName = async (req, res) => {
+  try {
+    const currentUser = await User.findOne({
+      where: {
+        uuid: req.params.uuid,
+      },
+    });
+    if (!currentUser)
+      return res.status(404).json({ message: "User belum terdaftar" });
+    // ubah name
+    await User.update(
+      { name: req.body.name },
+      {
+        where: {
+          id: currentUser.id,
+        },
+      }
+    );
+    res.status(200).json({ message: "Nama Berhasil Diubah" });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+exports.deleteAccount = async (req, res) => {
+  try {
+    const currentUser = await User.findOne({
+      where: {
+        uuid: req.params.uuid,
+      },
+    });
+    if (!currentUser)
+      return res.status(404).json({ message: "User belum terdaftar" });
+    // ubah name
+    await User.destroy({
+      where: {
+        id: currentUser.id,
+      },
+    });
+    res.status(200).json({ message: "Akun Berhasil Dihapus" });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};

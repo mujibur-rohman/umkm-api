@@ -6,9 +6,10 @@ const {
   updatePassword,
   sendVerification,
   activationEmail,
+  changeName,
+  deleteAccount,
 } = require("../controllers/AuthController");
 const multer = require("multer");
-const createEmailTransporter = require("../utils/createEmailTransporter");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -44,6 +45,8 @@ authRoute.put(
 );
 authRoute.put("/auth/change-password/:uuid", updatePassword);
 authRoute.put("/auth/verify-email/:uuid", activationEmail);
+authRoute.put("/auth/change-name/:uuid", changeName);
 authRoute.post("/auth/send-email-verification/:uuid", sendVerification);
+authRoute.delete("/auth/delete-account/:uuid", deleteAccount);
 
 module.exports = authRoute;
