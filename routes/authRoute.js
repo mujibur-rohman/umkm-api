@@ -5,6 +5,7 @@ const {
   changeProfilePicture,
   updatePassword,
   sendVerification,
+  activationEmail,
 } = require("../controllers/AuthController");
 const multer = require("multer");
 const createEmailTransporter = require("../utils/createEmailTransporter");
@@ -42,6 +43,7 @@ authRoute.put(
   changeProfilePicture
 );
 authRoute.put("/auth/change-password/:uuid", updatePassword);
+authRoute.put("/auth/verify-email/:uuid", activationEmail);
 authRoute.post("/auth/send-email-verification/:uuid", sendVerification);
 
 module.exports = authRoute;

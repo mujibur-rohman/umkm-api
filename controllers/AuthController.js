@@ -162,3 +162,27 @@ exports.sendVerification = async (req, res) => {
     res.status(400).json(error.message);
   }
 };
+
+exports.activationEmail = async (req, res) => {
+  try {
+    const currentUser = await User.findOne({
+      where: {
+        uuid: req.params.uuid,
+      },
+    });
+    if (!currentUser)
+      return res.status(404).json({ message: "User belum terdaftar" });
+    // ubah email verified jadi true
+    await User.update(
+      { emailVerified: true },
+      {
+        where: {
+          id: currentUser.id,
+        },
+      }
+    );
+    res.status(200).json({ message: "Berhasil Aktivasi Email" });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
