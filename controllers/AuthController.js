@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const { uuid } = require("uuidv4");
 const { User } = require("../models");
+const sendEmailVerification = require("../helper/sendEmailVerification");
 
 exports.registerUser = async (req, res) => {
   try {
@@ -141,6 +142,22 @@ exports.updatePassword = async (req, res) => {
       { where: { id: currentUser.id } }
     );
     res.status(200).json({ message: "Password Berhasil Diubah" });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+exports.sendVerification = async (req, res) => {
+  try {
+    const currentUser = await User.findOne({
+      where: {
+        uuid: req.params.uuid,
+      },
+    });
+    if (!currentUser)
+      return res.status(404).json({ message: "User belum terdaftar" });
+    await sendEmailVerification(currentUser);
+    res.status(200).json({ message: "Email Terkirim" });
   } catch (error) {
     res.status(400).json(error.message);
   }
