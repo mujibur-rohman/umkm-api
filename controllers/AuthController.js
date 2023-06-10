@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const { uuid } = require("uuidv4");
 const { User } = require("../models");
+const { Store } = require("../models");
 const sendEmailVerification = require("../helper/sendEmailVerification");
 
 exports.registerUser = async (req, res) => {
@@ -53,6 +54,13 @@ exports.login = async (req, res) => {
     const match = await argon2.verify(userAvailable.password, password);
     if (!match) return res.status(400).json({ message: "Password Salah" });
 
+    // Cek apakah user punya toko
+    const store = await Store.findOne({
+      where: {
+        userId: userAvailable.id,
+      },
+    });
+
     const accessToken = jwt.sign(
       {
         user: {
@@ -74,6 +82,7 @@ exports.login = async (req, res) => {
       email: userAvailable.email,
       profilePicture: userAvailable.profilePicture,
       emailVerified: userAvailable.emailVerified,
+      store: store ? store.id : null,
       token: { accessToken, expired: 60 },
     });
   } catch (error) {

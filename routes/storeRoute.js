@@ -1,5 +1,10 @@
 const express = require("express");
-const { createStore } = require("../controllers/StoreController");
+const {
+  createStore,
+  getMyStore,
+  updateStore,
+  deleteStore,
+} = require("../controllers/StoreController");
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -28,5 +33,8 @@ const upload = multer({
 const storeRoute = express.Router();
 
 storeRoute.post("/store/:uuid", upload.single("profilePicture"), createStore);
+storeRoute.get("/store/:uuid", getMyStore);
+storeRoute.put("/store/:storeId", upload.single("profilePicture"), updateStore);
+storeRoute.delete("/store/:storeId", deleteStore);
 
 module.exports = storeRoute;
