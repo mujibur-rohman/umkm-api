@@ -108,7 +108,10 @@ exports.changeProfilePicture = async (req, res) => {
       { where: { id: currentUser.id } }
     );
 
-    res.status(200).json({ message: "Foto Profil Berhasil Diubah" });
+    res.status(200).json({
+      message: "Foto Profil Berhasil Diubah",
+      data: filePath,
+    });
   } catch (error) {
     res.status(400).json(error.message);
   }
