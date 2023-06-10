@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const { User } = require("./models");
 const authRoute = require("./routes/authRoute");
 const cors = require("cors");
+const storeRoute = require("./routes/storeRoute");
 
 dotenv.config();
 
@@ -20,3 +21,4 @@ app.use(express.static("public"));
 app.listen(process.env.APP_PORT, () => console.log("Server Running"));
 
 app.use(authRoute);
+app.use(storeRoute);
