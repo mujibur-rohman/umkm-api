@@ -22,9 +22,16 @@ exports.createStore = async (req, res) => {
     if (availableStore)
       return res.status(404).json({ message: "Toko Sudah Terdaftar" });
 
-    const filePath = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
+    let filePath;
+    if (req.file) {
+      filePath = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    } else {
+      filePath = `${req.protocol}://${req.get(
+        "host"
+      )}/images/blank-profile-picture.png`;
+    }
 
     await Store.create({
       ...req.body,
@@ -39,11 +46,11 @@ exports.createStore = async (req, res) => {
 
 exports.getMyStore = async (req, res) => {
   try {
-    const { uuid } = req.params;
+    const { id } = req.params;
     // Cek apakah user ada
     const availableUser = await User.findOne({
       where: {
-        uuid: uuid,
+        id: id,
       },
     });
     if (!availableUser)
