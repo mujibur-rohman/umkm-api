@@ -33,12 +33,12 @@ exports.createStore = async (req, res) => {
       )}/images/blank-profile-picture.png`;
     }
 
-    await Store.create({
+    const newStore = await Store.create({
       ...req.body,
       userId: availableUser.id,
       profilePicture: filePath,
     });
-    res.status(200).json({ message: "Toko Berhasil Dibuat" });
+    res.status(200).json({ message: "Toko Berhasil Dibuat", data: newStore });
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -47,18 +47,10 @@ exports.createStore = async (req, res) => {
 exports.getMyStore = async (req, res) => {
   try {
     const { id } = req.params;
-    // Cek apakah user ada
-    const availableUser = await User.findOne({
-      where: {
-        id: id,
-      },
-    });
-    if (!availableUser)
-      return res.status(404).json({ message: "User Tidak Ditemukan" });
 
     const availableStore = await Store.findOne({
       where: {
-        userId: availableUser.id,
+        id,
       },
       include: {
         model: User,
@@ -80,26 +72,32 @@ exports.updateStore = async (req, res) => {
         id: req.params.storeId,
       },
     });
+    console.log(req.body);
     if (!availableStore)
       return res.status(404).json({ message: "Tidak Ada Toko" });
 
     // Hapus gambar lama
-    if (availableStore.profilePicture) {
+    if (availableStore.profilePicture && req.file) {
       const splitFilename = availableStore.profilePicture.split("/");
       const fileNameOld = splitFilename[splitFilename.length - 1];
       const filepathOld = `./public/images/${fileNameOld}`;
-      if (fileNameOld !== req.file.filename) {
+      if (
+        fileNameOld !== req.file.filename &&
+        fileNameOld !== "blank-profile-picture.png"
+      ) {
         fs.unlinkSync(filepathOld);
       }
     }
-
-    const filePath = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
+    let filePath;
+    if (req.file) {
+      filePath = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    }
     await Store.update(
       {
         ...req.body,
-        profilePicture: filePath,
+        profilePicture: req.body.profilePicture || filePath,
       },
       { where: { id: availableStore.id } }
     );
