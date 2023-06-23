@@ -72,7 +72,6 @@ exports.updateStore = async (req, res) => {
         id: req.params.storeId,
       },
     });
-    console.log(req.body);
     if (!availableStore)
       return res.status(404).json({ message: "Tidak Ada Toko" });
 
