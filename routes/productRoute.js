@@ -2,6 +2,8 @@ const express = require("express");
 const {
   createProduct,
   getProduct,
+  updateProduct,
+  deleteProduct,
 } = require("../controllers/ProductController");
 const multer = require("multer");
 
@@ -32,5 +34,11 @@ const productRoute = express.Router();
 
 productRoute.post("/product", upload.single("picture"), createProduct);
 productRoute.get("/product/:storeId", getProduct);
+productRoute.delete("/product/:productId", deleteProduct);
+productRoute.put(
+  "/product/:productId",
+  upload.single("picture"),
+  updateProduct
+);
 
 module.exports = productRoute;
