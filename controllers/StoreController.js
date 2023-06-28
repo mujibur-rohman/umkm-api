@@ -1,4 +1,5 @@
 const { User } = require("../models");
+const { Product } = require("../models");
 const { Store } = require("../models");
 const fs = require("fs");
 
@@ -52,10 +53,16 @@ exports.getMyStore = async (req, res) => {
       where: {
         id,
       },
-      include: {
-        model: User,
-        attributes: ["email", "name"],
-      },
+      include: [
+        {
+          model: User,
+          attributes: ["email", "name"],
+        },
+        {
+          model: Product,
+          attributes: ["id", "name", "picture", "description", "price"],
+        },
+      ],
     });
     if (!availableStore)
       return res.status(404).json({ message: "Tidak Ada Toko" });
