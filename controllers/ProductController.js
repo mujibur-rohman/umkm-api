@@ -57,6 +57,22 @@ exports.getProduct = async (req, res) => {
   }
 };
 
+exports.getProductOne = async (req, res) => {
+  try {
+    const availableProduct = await Product.findOne({
+      where: {
+        id: req.params.productId,
+      },
+    });
+    if (!availableProduct)
+      return res.status(404).json({ message: "Produk Tidak Ditemukan" });
+
+    res.status(200).json(availableProduct);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
 exports.updateProduct = async (req, res) => {
   try {
     const availableProduct = await Product.findOne({

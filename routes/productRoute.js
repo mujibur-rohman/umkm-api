@@ -4,6 +4,7 @@ const {
   getProduct,
   updateProduct,
   deleteProduct,
+  getProductOne,
 } = require("../controllers/ProductController");
 const multer = require("multer");
 
@@ -34,6 +35,7 @@ const productRoute = express.Router();
 
 productRoute.post("/product", upload.single("picture"), createProduct);
 productRoute.get("/product", getProduct);
+productRoute.get("/product/:productId", getProductOne);
 productRoute.delete("/product/:productId", deleteProduct);
 productRoute.put(
   "/product/:productId",
