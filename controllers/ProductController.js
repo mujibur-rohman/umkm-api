@@ -40,7 +40,7 @@ exports.getProduct = async (req, res) => {
   try {
     const availableStore = await Store.findOne({
       where: {
-        id: req.params.storeId,
+        id: req.query.storeId,
       },
     });
     if (!availableStore)

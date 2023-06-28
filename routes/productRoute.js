@@ -33,7 +33,7 @@ const upload = multer({
 const productRoute = express.Router();
 
 productRoute.post("/product", upload.single("picture"), createProduct);
-productRoute.get("/product/:storeId", getProduct);
+productRoute.get("/product", getProduct);
 productRoute.delete("/product/:productId", deleteProduct);
 productRoute.put(
   "/product/:productId",
