@@ -1,6 +1,7 @@
 const { User } = require("../models");
 const { Product } = require("../models");
 const { Store } = require("../models");
+const haversine = require("haversine-distance");
 const fs = require("fs");
 
 exports.createStore = async (req, res) => {
@@ -67,6 +68,27 @@ exports.getMyStore = async (req, res) => {
     if (!availableStore)
       return res.status(404).json({ message: "Tidak Ada Toko" });
     res.status(200).json(availableStore);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+exports.getStoreNearly = async (req, res) => {
+  try {
+    const store = await Store.findAll();
+
+    const nearlyStore = [];
+
+    store.forEach((item) => {
+      // ambil jarak
+      const distance = haversine(
+        { latitude: item.latitude * 1, longitude: item.longitude * 1 },
+        { latitude: req.query.latitude * 1, longitude: req.query.longitude * 1 }
+      );
+      nearlyStore.push({ ...item.dataValues, distance: distance / 1000 });
+    });
+
+    res.status(200).json(nearlyStore.sort((a, b) => a.distance - b.distance));
   } catch (error) {
     res.status(400).json(error.message);
   }
