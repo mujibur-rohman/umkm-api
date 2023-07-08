@@ -4,6 +4,7 @@ const authRoute = require("./routes/authRoute");
 const cors = require("cors");
 const storeRoute = require("./routes/storeRoute");
 const productRoute = require("./routes/productRoute");
+const transactionRoute = require("./routes/transactionRoute");
 
 dotenv.config();
 
@@ -23,3 +24,4 @@ app.listen(process.env.APP_PORT, () => console.log("Server Running"));
 app.use(authRoute);
 app.use(storeRoute);
 app.use(productRoute);
+app.use(transactionRoute);

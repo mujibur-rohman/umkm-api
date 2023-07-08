@@ -30,7 +30,9 @@ exports.createProduct = async (req, res) => {
       picture: filePath,
       storeId,
     });
-    res.status(200).json({ message: "Ada", data: newProduct });
+    res
+      .status(200)
+      .json({ message: "Produk Berhasil Ditambahkan", data: newProduct });
   } catch (error) {
     res.status(400).json(error.message);
   }
