@@ -3,6 +3,7 @@ const { Product } = require("../models");
 const { Store } = require("../models");
 const haversine = require("haversine-distance");
 const fs = require("fs");
+const { Op } = require("sequelize");
 
 exports.createStore = async (req, res) => {
   try {
@@ -75,7 +76,13 @@ exports.getMyStore = async (req, res) => {
 
 exports.getStoreNearly = async (req, res) => {
   try {
-    const store = await Store.findAll();
+    const store = await Store.findAll({
+      where: {
+        id: {
+          [Op.notLike]: req.query.myStoreId,
+        },
+      },
+    });
 
     const nearlyStore = [];
 
